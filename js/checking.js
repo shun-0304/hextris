@@ -48,6 +48,10 @@ function consolidateBlocks(hex,side,index){
 	floodFill(hex,side,index,deleting);
 	//make sure there are more than 3 blocks to be deleted
 	if(deleting.length<3){return;}
+	
+	// 3つ以上のブロックが揃った場合は音を鳴らす
+	playSound('blockClear');
+	
 	var i;
 	for(i=0; i<deleting.length;i++) {
 		var arr = deleting[i];
