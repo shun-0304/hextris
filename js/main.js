@@ -71,6 +71,14 @@ function resumeGame() {
 	}, 7000);
 
 	checkVisualElements(0);
+	
+	// ゲーム再開時にサウンドを有効にするため、ダミーの音を再生
+	try {
+		playSound('blockClear');
+		console.log("Activated audio on resumeGame");
+	} catch(e) {
+		console.error("Could not activate audio:", e);
+	}
 }
 
 function checkVisualElements(arg) {
@@ -103,6 +111,14 @@ function init(b) {
 		}, 7000);
 		clearSaveState();
 		checkVisualElements(1);
+		
+		// ゲーム開始時にサウンドを有効にするため、ダミーの音を再生
+		try {
+			playSound('blockClear');
+			console.log("Activated audio on game init");
+		} catch(e) {
+			console.error("Could not activate audio:", e);
+		}
 	}
 	if (highscores.length === 0 ){
 		$("#currentHighScore").text(0);
@@ -225,6 +241,21 @@ function setStartScreen() {
 
 	gameState = 0;
 	requestAnimFrame(animLoop);
+	
+	// 起動時にサウンドプリロード用のハンドラを追加
+	$('#startBtn').on('click', function() {
+		try {
+			// クリック時にサウンドが再生できるようにする
+			var testSound = new Audio('sounds/block_clear.mp3');
+			testSound.volume = 0;  // 無音で再生
+			testSound.play().catch(function(e) {
+				console.log("Initial sound play failed, but this is expected:", e);
+			});
+			console.log("Start button clicked, sound initialized");
+		} catch(e) {
+			console.error("Could not initialize sound:", e);
+		}
+	});
 }
 
 var spd = 1;
@@ -343,6 +374,15 @@ function checkGameOver() {
 			}
 			writeHighScores();
 			gameOverDisplay();
+			
+			// ゲームオーバー時にも音を鳴らせるようにする
+			try {
+				playSound('blockClear');
+				console.log("Game over sound played");
+			} catch(e) {
+				console.error("Could not play game over sound:", e);
+			}
+			
 			return true;
 		}
 	}
@@ -373,6 +413,14 @@ function showHelp() {
 
 	$("#openSideBar").fadeIn(150,"linear");
 	$('#helpScreen').fadeToggle(150, "linear");
+	
+	// ヘルプ画面表示時にもサウンドを有効化
+	try {
+		playSound('blockClear');
+		console.log("Help screen sound activated");
+	} catch(e) {
+		console.error("Could not activate help screen sound:", e);
+	}
 }
 
 (function(){
